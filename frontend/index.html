@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Metadata Catalog + Lineage</title>
+    <style>
+        button { margin-left: 5px; }
+        #lineage_graph { border: 1px solid #ccc; padding: 10px; margin-top: 20px; }
+        .node { margin-left: 20px; }
+    </style>
+</head>
+<body>
+    <h1>Metadata Catalog</h1>
+
+    <h2>Add Metadata</h2>
+    <input id="name" placeholder="Name">
+    <select id="type">
+        <option value="policy">Policy</option>
+        <option value="claim">Claim</option>
+        <option value="reserve_model">Reserve Model</option>
+    </select>
+    <input id="pii_tags" placeholder="PII Tags (comma-separated)">
+    <input id="compliance_tags" placeholder="Compliance Tags (comma-separated)">
+    <input id="created_by" placeholder="Created By">
+    <button id="addBtn">Add</button>
+
+    <h2>Search Metadata</h2>
+    <input id="search_tag" placeholder="Search by tag">
+    <button onclick="searchMetadata()">Search</button>
+    <ul id="metadata_list"></ul>
+
+    <h2>Lineage Visualization</h2>
+    <button onclick="showLineage()">Show Lineage</button>
+    <div id="lineage_graph"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>

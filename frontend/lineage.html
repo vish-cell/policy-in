@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Lineage Visualization</title>
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<h2>Lineage Visualization</h2>
+<svg id="lineage" width="800" height="400"></svg>
+<script>
+fetch("http://localhost:5000/lineage").then(r=>r.json()).then(data=>{
+  const svg = d3.select("#lineage");
+  const nodes={}, links=[];
+  data.forEach(d=>{
+    nodes[d.from_name]={name:d.from_name};
+    nodes[d.to_name]={name:d.to_name};
+    links.push({source:d.from_name,target:d.to_name});
+  });
+  const sim = d3.forceSimulation(Object.values(nodes))
+    .force("link", d3.forceLink(links).id(d=>d.name).distance(150))
+    .force("charge", d3.forceManyBody().strength(-200))
+    .force("center", d3.forceCenter(400,200));
+  const link = svg.selectAll("line").data(links).enter().append("line").attr("stroke","gray");
+  const node = svg.selectAll("circle").data(sim.nodes()).enter().append("circle").attr("r",20).attr("fill","skyblue");
+  const label = svg.selectAll("text").data(sim.nodes()).enter().append("text").text(d=>d.name).attr("dy",4).attr("x",-20);
+  sim.on("tick", ()=>{
+    link.attr("x1",d=>d.source.x).attr("y1",d=>d.source.y).attr("x2",d=>d.target.x).attr("y2",d=>d.target.y);
+    node.attr("cx",d=>d.x).attr("cy",d=>d.y);
+    label.attr("x",d=>d.x).attr("y",d=>d.y);
+  });
+});
+</script>
+</body>
+</html>

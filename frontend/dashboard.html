@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head><title>Fraud Dashboard</title><link rel="stylesheet" href="style.css"></head>
+<body>
+<h2>Fraud Dashboard</h2>
+<button onclick="loadFraud()">Load Fraud Stats</button>
+<table id="fraudTable"><tr><th>Claim Amount</th><th>Duplicate Claims</th><th>Status</th></tr></table>
+<script>
+function loadFraud(){
+  const claims=[{amount:120000, duplicate_claims:2},{amount:60000},{amount:30000}];
+  const table=document.getElementById("fraudTable");
+  claims.forEach(async c=>{
+    const res=await fetch("http://localhost:5000/fraud_check",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(c)});
+    const data=await res.json();
+    table.innerHTML+=`<tr><td>${c.amount}</td><td>${c.duplicate_claims||0}</td><td>${data.status}</td></tr>`;
+  });
+}
+</script>
+</body>
+</html>
